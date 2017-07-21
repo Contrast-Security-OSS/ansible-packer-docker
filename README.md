@@ -1,2 +1,2 @@
 # ansible-packer-docker
-Build an ansible-packer Docker container
+Build an ansible-packer Docker image
