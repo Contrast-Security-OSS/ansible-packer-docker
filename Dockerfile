@@ -6,6 +6,7 @@ RUN \
     python \
     py-yaml \
     py-jinja2 \
+    py-crypto \
     curl && \
     rm -rf /var/cache/apk/*
 
