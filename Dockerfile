@@ -3,6 +3,7 @@ FROM alpine:3.6
 RUN \
   apk add --update-cache \
     openssh-client \
+    git \
     python \
     py-yaml \
     py-jinja2 \
