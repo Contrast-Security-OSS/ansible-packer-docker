@@ -9,7 +9,7 @@ RUN \
     py-jinja2 \
     py-crypto \
     curl && \
-    rm -rf /var/cache/apk/*
+  rm -rf /var/cache/apk/*
 
 RUN \
   mkdir /ansible && \
