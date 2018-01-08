@@ -13,6 +13,14 @@ RUN \
   rm -rf /var/cache/apk/*
 
 RUN \
+  echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+
+RUN \
+  apk add --update-cache \
+    py-boto3 && \
+  rm -rf /var/cache/apk/*
+
+RUN \
   mkdir /ansible && \
   curl -fsSL https://releases.ansible.com/ansible/ansible-2.3.1.0.tar.gz -o ansible.tar.gz && \
   tar -xzf ansible.tar.gz -C ansible --strip-components 1 && \
