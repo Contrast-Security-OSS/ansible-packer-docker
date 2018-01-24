@@ -9,7 +9,8 @@ RUN \
     py-jinja2 \
     py-crypto \
     py-boto \
-    curl && \
+    curl  \
+    bind-tools && \
   rm -rf /var/cache/apk/*
 
 RUN \
