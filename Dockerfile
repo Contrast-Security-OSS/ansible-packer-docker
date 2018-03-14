@@ -23,7 +23,7 @@ RUN \
 
 RUN \
   mkdir /ansible && \
-  curl -fsSL https://releases.ansible.com/ansible/ansible-2.3.1.0.tar.gz -o ansible.tar.gz && \
+  curl -fsSL https://releases.ansible.com/ansible/ansible-2.4.3.0.tar.gz -o ansible.tar.gz && \
   tar -xzf ansible.tar.gz -C ansible --strip-components 1 && \
   rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging
 
