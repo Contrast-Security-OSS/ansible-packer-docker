@@ -9,6 +9,7 @@ RUN \
     py-jinja2 \
     py-crypto \
     py-boto \
+    aws-cli \
     curl  \
     bind-tools && \
   rm -rf /var/cache/apk/*
