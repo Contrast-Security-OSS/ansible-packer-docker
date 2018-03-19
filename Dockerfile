@@ -19,6 +19,7 @@ RUN \
 
 RUN \
   apk add --update-cache \
+    aws-cli \
     py-s3transfer \
     py-boto3 && \
   rm -rf /var/cache/apk/*
