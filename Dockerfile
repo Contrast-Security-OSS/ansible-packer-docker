@@ -5,13 +5,17 @@ RUN \
     docker \
     openssh-client \
     git \
+    python-dev \
     python \
     py-yaml \
     py-jinja2 \
     py-crypto \
     py-boto \
     py-futures \
+    py-pip \
+    py-boto \
     curl  \
+    jq \
     bind-tools && \
   rm -rf /var/cache/apk/*
 
@@ -24,6 +28,11 @@ RUN \
     py-s3transfer \
     py-boto3 && \
   rm -rf /var/cache/apk/*
+
+RUN \
+  pip install --upgrade \
+    boto3 \
+    botocore
 
 RUN \
   mkdir /ansible && \
