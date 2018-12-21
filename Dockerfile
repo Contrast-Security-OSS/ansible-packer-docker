@@ -29,13 +29,11 @@ RUN \
     py-boto3 && \
   rm -rf /var/cache/apk/*
 
-RUN \
-  echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
-
-RUN \
-  apk add --update-cache \
-    terraform && \
-  rm -rf /var/cache/apk/*
+ENV TERRAFORM_VERSION=0.11.10
+RUN apk add --update git curl openssh && \
+    curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
+    rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 RUN \
   pip install --upgrade \
