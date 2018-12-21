@@ -30,6 +30,14 @@ RUN \
   rm -rf /var/cache/apk/*
 
 RUN \
+  echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+
+RUN \
+  apk add --update-cache \
+    terraform && \
+  rm -rf /var/cache/apk/*
+
+RUN \
   pip install --upgrade \
     boto3 \
     botocore
