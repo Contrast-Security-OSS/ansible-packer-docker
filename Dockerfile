@@ -1,4 +1,7 @@
 FROM alpine:3.6
+ENV TERRAFORM_VERSION=0.12.8
+ENV ANSIBLE_VERSION=2.8.5
+ENV PACKER_VERSION=1.4.3
 
 RUN \
   apk add --update-cache \
@@ -29,7 +32,6 @@ RUN \
     py-boto3 && \
   rm -rf /var/cache/apk/*
 
-ENV TERRAFORM_VERSION=0.11.10
 RUN apk add --update git curl openssh && \
     curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
@@ -37,18 +39,19 @@ RUN apk add --update git curl openssh && \
 
 RUN \
   pip install --upgrade \
+    pip \
     boto3 \
     botocore
 
 RUN \
   mkdir /ansible && \
-  curl -fsSL https://releases.ansible.com/ansible/ansible-2.4.3.0.tar.gz -o ansible.tar.gz && \
+  curl -fsSL https://releases.ansible.com/ansible/ansible-${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz && \
   tar -xzf ansible.tar.gz -C ansible --strip-components 1 && \
   rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging
 
 
 RUN \
-  curl -fsSL https://releases.hashicorp.com/packer/1.0.0/packer_1.0.0_linux_amd64.zip -o packer.zip && \
+  curl -fsSL https://releases.hashicorp.com/packer/${TERRAFORM_VERSION}/packer_${TERRAFORM_VERSION}_linux_amd64.zip -o packer.zip && \
   unzip packer.zip -d /usr/bin/ && \
   rm -rf packer.zip
 
