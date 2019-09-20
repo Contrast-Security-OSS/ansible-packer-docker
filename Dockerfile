@@ -25,13 +25,6 @@ RUN \
 RUN \
   echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 
-RUN \
-  apk add --update-cache \
-    aws-cli \
-    py-s3transfer \
-    py-boto3 && \
-  rm -rf /var/cache/apk/*
-
 RUN apk add --update git curl openssh && \
     curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
@@ -41,7 +34,8 @@ RUN \
   pip install --upgrade \
     pip \
     boto3 \
-    botocore
+    botocore \
+    awscli
 
 RUN \
   mkdir /ansible && \
@@ -51,7 +45,7 @@ RUN \
 
 
 RUN \
-  curl -fsSL https://releases.hashicorp.com/packer/${TERRAFORM_VERSION}/packer_${TERRAFORM_VERSION}_linux_amd64.zip -o packer.zip && \
+  curl -fsSL https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip -o packer.zip && \
   unzip packer.zip -d /usr/bin/ && \
   rm -rf packer.zip
 
@@ -63,5 +57,3 @@ ENV \
   ANSIBLE_SSH_PIPELINING=True \
   PATH=/ansible/bin:$PATH \
   PYTHONPATH=/ansible/lib
-
-ENTRYPOINT ["packer"]
