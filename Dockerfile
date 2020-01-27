@@ -17,6 +17,8 @@ RUN \
     py-futures \
     py-pip \
     py-boto \
+    python3 \
+    bash \
     curl  \
     jq \
     ruby \
