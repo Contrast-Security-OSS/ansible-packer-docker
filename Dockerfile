@@ -5,48 +5,48 @@ ENV PACKER_VERSION=1.6.6
 
 RUN \
   apk add --update-cache \
-    docker \
-    openssh-client \
-    git \
-    python-dev \
-    python \
-    py-yaml \
-    py-jinja2 \
-    py-crypto \
-    py-boto \
-    py-futures \
-    py-pip \
-    py-boto \
-    python3 \
-    bash \
-    curl  \
-    jq \
-    ruby \
-    ruby-io-console \
-    build-base \
-    ruby-dev \
-    libxml2-dev \
-    libffi-dev \
-    bind-tools && \
+  docker \
+  openssh-client \
+  git \
+  python-dev \
+  python \
+  py-yaml \
+  py-jinja2 \
+  py-crypto \
+  py-boto \
+  py-futures \
+  py-pip \
+  py-boto \
+  python3 \
+  bash \
+  curl  \
+  jq \
+  ruby \
+  ruby-io-console \
+  build-base \
+  ruby-dev \
+  libxml2-dev \
+  libffi-dev \
+  bind-tools && \
   rm -rf /var/cache/apk/*
 
 RUN gem install --no-document inspec && \
-    gem install --no-document inspec-bin  && \
-    apk del build-base
+  gem install --no-document inspec-bin  && \
+  apk del build-base
 
 RUN \
   echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
-    rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+  unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
+  rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 RUN \
   pip install --upgrade \
-    pip \
-    boto3 \
-    botocore \
-    awscli
+  pip \
+  boto3 \
+  botocore \
+  awscli
 
 RUN \
   mkdir /ansible && \
