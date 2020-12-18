@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.12
 ENV TERRAFORM_VERSION=0.12.8
 ENV ANSIBLE_VERSION=2.8.5
 ENV PACKER_VERSION=1.6.6
@@ -8,16 +8,14 @@ RUN \
   docker \
   openssh-client \
   git \
-  python-dev \
-  python \
-  py-yaml \
-  py-jinja2 \
-  py-crypto \
-  py-boto \
-  py-futures \
-  py-pip \
-  py-boto \
+  py3-yaml \
+  py3-jinja2 \
+  py3-crypto \
+  py3-boto \
+  py3-pip \
+  py3-boto \
   python3 \
+  python3-dev \
   bash \
   curl  \
   jq \
@@ -60,6 +58,7 @@ RUN \
   unzip packer.zip -d /usr/bin/ && \
   rm -rf packer.zip
 
+RUN ln -s /usr/bin/python3 /usr/bin/python
 
 ENV \
   ANSIBLE_GATHERING=smart \
