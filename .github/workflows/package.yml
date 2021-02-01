@@ -17,6 +17,6 @@ jobs:
         with:
           username: contrast-ops
           password: ${{ secrets.GHCR_PAT }}
-          registry: ghcr.io
+          registry: docker.pkg.github.com
           repository: contrast-security-oss/ansible-packer-docker/ansible-packer
           tag_with_ref: true
