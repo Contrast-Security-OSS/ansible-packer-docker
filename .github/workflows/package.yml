@@ -15,7 +15,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v1
         with:
-          username: contrast-ops
+          username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
           registry: docker.pkg.github.com
           repository: contrast-security-oss/ansible-packer-docker/ansible-packer
