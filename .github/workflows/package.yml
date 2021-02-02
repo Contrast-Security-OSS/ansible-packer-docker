@@ -17,6 +17,6 @@ jobs:
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
-          registry: ghcr.io/contrast-security-oss
-          repository: contrast-security-oss/ansible-packer-docker/ansible-packer
+          registry: ghcr.io
+          repository: contrast-security-oss/ansible-packer
           tag_with_ref: true
