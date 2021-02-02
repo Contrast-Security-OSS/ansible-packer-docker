@@ -3,7 +3,7 @@ name: Push image to ghcr
 on:
   push:
     branches:
-      - "DEVOPS-7283-move-image"
+      - "master"
 
 jobs:
   push_to_registry:
