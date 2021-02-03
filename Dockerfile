@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.10
 ENV TERRAFORM_VERSION=0.12.8
 ENV ANSIBLE_VERSION=2.8.5
 ENV PACKER_VERSION=1.5.5
@@ -29,6 +29,19 @@ RUN \
     libffi-dev \
     bind-tools && \
   rm -rf /var/cache/apk/*
+
+RUN apk del ruby
+
+RUN wget --no-check-certificate -O ruby-install.tar.gz https://github.com/postmodern/ruby-install/archive/master.tar.gz
+RUN tar -xzvf ruby-install.tar.gz
+RUN cd ruby-install-master && make install
+RUN rm -rf /ruby-install-master && rm -rf /ruby-install.tar.gz
+
+RUN ruby-install --latest
+
+
+RUN gem update --system --no-document
+RUN gem install bundler --force
 
 RUN gem install --no-document inspec && \
     gem install --no-document inspec-bin  && \

@@ -1,0 +1,22 @@
+name: Push image to ghcr
+
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+  push_to_registry:
+    name: Push Docker image to GitHub Container Registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Build and push
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+          registry: ghcr.io
+          repository: contrast-security-inc/ansible-packer
+          tag_with_ref: true
