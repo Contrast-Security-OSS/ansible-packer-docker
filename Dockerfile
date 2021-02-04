@@ -37,8 +37,7 @@ RUN tar -xzvf ruby-install.tar.gz
 RUN cd ruby-install-master && make install
 RUN rm -rf /ruby-install-master && rm -rf /ruby-install.tar.gz
 
-RUN ruby-install --latest
-
+RUN ruby-install --latest ruby
 
 RUN gem update --system --no-document
 RUN gem install bundler --force
