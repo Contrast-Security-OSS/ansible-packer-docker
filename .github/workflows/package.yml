@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "master"
+      - "devops-0-rspec-fix"
 
 jobs:
   push_to_registry:
