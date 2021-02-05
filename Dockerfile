@@ -5,61 +5,56 @@ ENV PACKER_VERSION=1.5.5
 
 RUN \
   apk add --update-cache \
-    docker \
-    openssh-client \
-    git \
-    python-dev \
-    python \
-    py-yaml \
-    py-jinja2 \
-    py-crypto \
-    py-boto \
-    py-futures \
-    py-pip \
-    py-boto \
-    python3 \
-    bash \
-    curl  \
-    jq \
-    ruby \
-    ruby-io-console \
-    build-base \
-    ruby-dev \
-    libxml2-dev \
-    libffi-dev \
-    bind-tools && \
+  docker \
+  openssh-client \
+  git \
+  python-dev \
+  python \
+  py-yaml \
+  py-jinja2 \
+  py-crypto \
+  py-boto \
+  py-futures \
+  py-pip \
+  py-boto \
+  python3 \
+  bash \
+  curl  \
+  jq \
+  build-base \
+  libxml2-dev \
+  libffi-dev \
+  openssl-dev \
+  bind-tools && \
   rm -rf /var/cache/apk/*
-
-RUN apk del ruby
 
 RUN wget --no-check-certificate -O ruby-install.tar.gz https://github.com/postmodern/ruby-install/archive/master.tar.gz
 RUN tar -xzvf ruby-install.tar.gz
 RUN cd ruby-install-master && make install
 RUN rm -rf /ruby-install-master && rm -rf /ruby-install.tar.gz
 
-RUN ruby-install --latest
-
+RUN ruby-install --system --latest ruby
 
 RUN gem update --system --no-document
 RUN gem install bundler --force
 
 RUN gem install --no-document inspec && \
-    gem install --no-document inspec-bin  && \
-    apk del build-base
+  gem install --no-document inspec-bin  && \
+  apk del build-base
 
 RUN \
   echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
-    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
-    rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
+  unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
+  rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
 RUN \
   pip install --upgrade \
-    pip \
-    boto3 \
-    botocore \
-    awscli
+  pip \
+  boto3 \
+  botocore \
+  awscli
 
 RUN \
   mkdir /ansible && \
