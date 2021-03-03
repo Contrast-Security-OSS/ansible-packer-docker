@@ -1,37 +1,42 @@
-FROM alpine:3.12
-ENV TERRAFORM_VERSION=0.12.8
-ENV ANSIBLE_VERSION=2.8.5
-ENV PACKER_VERSION=1.6.6
+FROM python:3.8-alpine
+ARG INSPEC_VERSION=4.17.14
+ARG TERRAFORM_VERSION=0.13.2
+ARG ANSIBLE_VERSION=2.8.5
+ARG PACKER_VERSION=1.7.0
 
 RUN \
   apk add --update-cache \
   docker \
   openssh-client \
   git \
-  py3-yaml \
-  py3-jinja2 \
-  py3-crypto \
-  py3-boto \
-  py3-pip \
-  py3-boto \
-  python3 \
-  python3-dev \
   bash \
   curl  \
   jq \
-  ruby \
-  ruby-io-console \
-  build-base \
-  ruby-dev \
   libxml2-dev \
   libffi-dev \
-  bind-tools && \
-  rm -rf /var/cache/apk/*
+  g++ \
+  gcc \
+  musl-dev \
+  make \
+  unzip \
+  wget && \
+  rm -rf /var/cache/apk/* && \
+  ln -s /usr/bin/python3 /usr/bin/python
 
-RUN gem install --no-document inspec && \
-  gem install --no-document inspec-bin  && \
-  apk del build-base
+# Ruby -> Inspec
+RUN apk --no-cache add \
+  ruby-dev \
+  ruby-rdoc \
+  ruby-bundler \
+  ruby-json \
+  ruby-bundler
 
+RUN gem install bigdecimal && \
+    gem install --no-document --version ${INSPEC_VERSION} inspec && \
+    gem install --no-document --version ${INSPEC_VERSION} inspec-bin && \
+    inspec detect --chef-license=accept-silent
+
+# Terraform
 RUN \
   echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 
@@ -39,26 +44,20 @@ RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform
   unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
   rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
+# Ansible
 RUN \
   pip install --upgrade \
   pip \
   boto3 \
   botocore \
-  awscli
+  awscli && \
+  ansible==${ANSIBLE_VERSION}
 
-RUN \
-  mkdir /ansible && \
-  curl -fsSL https://releases.ansible.com/ansible/ansible-${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz && \
-  tar -xzf ansible.tar.gz -C ansible --strip-components 1 && \
-  rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging
-
-
+# Packer
 RUN \
   curl -fsSL https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip -o packer.zip && \
   unzip packer.zip -d /usr/bin/ && \
   rm -rf packer.zip
-
-RUN ln -s /usr/bin/python3 /usr/bin/python
 
 ENV \
   ANSIBLE_GATHERING=smart \
