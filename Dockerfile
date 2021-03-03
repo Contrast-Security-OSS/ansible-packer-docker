@@ -1,8 +1,8 @@
 FROM python:3.8-alpine
-ARG INSPEC_VERSION=4.17.14
-ARG TERRAFORM_VERSION=0.13.2
-ARG ANSIBLE_VERSION=2.8.5
-ARG PACKER_VERSION=1.7.0
+ENV INSPEC_VERSION=4.17.14
+ENV TERRAFORM_VERSION=0.13.2
+ENV ANSIBLE_VERSION=2.8.5
+ENV PACKER_VERSION=1.7.0
 
 RUN \
   apk add --update-cache \
@@ -11,13 +11,16 @@ RUN \
   git \
   bash \
   curl  \
+  cargo \
+  g++ \
+  gcc \
   jq \
   libxml2-dev \
   libffi-dev \
-  g++ \
-  gcc \
+  openssl-dev \
   musl-dev \
   make \
+  rust \
   unzip \
   wget && \
   rm -rf /var/cache/apk/* && \
@@ -50,8 +53,8 @@ RUN \
   pip \
   boto3 \
   botocore \
-  awscli && \
-  ansible==${ANSIBLE_VERSION}
+  awscli
+RUN pip install ansible==${ANSIBLE_VERSION}
 
 # Packer
 RUN \
