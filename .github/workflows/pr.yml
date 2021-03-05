@@ -1,0 +1,17 @@
+name: Test Compile
+
+on:
+  pull_request:
+jobs:
+  test_compile:
+    name: Test Complie
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Build
+        uses: docker/build-push-action@v1
+        with:
+          push: false
+          registry: ghcr.io
+          repository: contrast-security-inc/ansible-packer

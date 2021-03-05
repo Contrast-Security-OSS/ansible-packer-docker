@@ -1,4 +1,5 @@
-FROM alpine:3.13
+FROM python:3.8-alpine
+ENV INSPEC_VERSION=4.17.14
 ENV TERRAFORM_VERSION=0.13.2
 ENV ANSIBLE_VERSION=2.8.5
 ENV PACKER_VERSION=1.7.0
@@ -8,40 +9,37 @@ RUN \
   docker \
   openssh-client \
   git \
-  python-dev \
-  python \
-  py-yaml \
-  py-jinja2 \
-  py-crypto \
-  py-boto \
-  py-futures \
-  py-pip \
-  py-boto \
-  python3 \
   bash \
   curl  \
+  cargo \
+  g++ \
+  gcc \
   jq \
-  build-base \
   libxml2-dev \
   libffi-dev \
   openssl-dev \
-  bind-tools && \
-  rm -rf /var/cache/apk/*
+  musl-dev \
+  make \
+  rust \
+  unzip \
+  wget && \
+  rm -rf /var/cache/apk/* && \
+  ln -s /usr/bin/python3 /usr/bin/python
 
-RUN wget --no-check-certificate -O ruby-install.tar.gz https://github.com/postmodern/ruby-install/archive/master.tar.gz
-RUN tar -xzvf ruby-install.tar.gz
-RUN cd ruby-install-master && make install
-RUN rm -rf /ruby-install-master && rm -rf /ruby-install.tar.gz
+# Ruby -> Inspec
+RUN apk --no-cache add \
+  ruby-dev \
+  ruby-rdoc \
+  ruby-bundler \
+  ruby-json \
+  ruby-bundler
 
-RUN ruby-install --system --latest ruby
+RUN gem install bigdecimal && \
+    gem install --no-document --version ${INSPEC_VERSION} inspec && \
+    gem install --no-document --version ${INSPEC_VERSION} inspec-bin && \
+    inspec detect --chef-license=accept-silent
 
-RUN gem update --system --no-document
-RUN gem install bundler --force
-
-RUN gem install --no-document inspec && \
-  gem install --no-document inspec-bin  && \
-  apk del build-base
-
+# Terraform
 RUN \
   echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 
@@ -49,25 +47,20 @@ RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform
   unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
   rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
 
+# Ansible
 RUN \
   pip install --upgrade \
   pip \
   boto3 \
   botocore \
   awscli
+RUN pip install ansible==${ANSIBLE_VERSION}
 
-RUN \
-  mkdir /ansible && \
-  curl -fsSL https://releases.ansible.com/ansible/ansible-${ANSIBLE_VERSION}.tar.gz -o ansible.tar.gz && \
-  tar -xzf ansible.tar.gz -C ansible --strip-components 1 && \
-  rm -fr ansible.tar.gz /ansible/docs /ansible/examples /ansible/packaging
-
-
+# Packer
 RUN \
   curl -fsSL https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip -o packer.zip && \
   unzip packer.zip -d /usr/bin/ && \
   rm -rf packer.zip
-
 
 ENV \
   ANSIBLE_GATHERING=smart \
